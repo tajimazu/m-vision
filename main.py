@@ -9,7 +9,7 @@ st.title("🀄 M-Vision AI点数計算")
 # API設定
 if "GEMINI_API_KEY" in st.secrets:
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('models/gemini-1.5-flash')
 
     # カメラ入力
     img_file = st.camera_input("手牌を撮影してください")
