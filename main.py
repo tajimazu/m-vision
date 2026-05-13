@@ -20,3 +20,4 @@ if img_file:
             st.write(response.text)
         except Exception as e:
             st.error(f"エラー内容: {e}")
+あ
