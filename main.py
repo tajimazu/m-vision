@@ -2,22 +2,29 @@ import streamlit as st
 import google.generativeai as genai
 from PIL import Image
 
-st.title("🀄 M-Vision AI 最終テスト")
+# --- 設定 ---
+st.set_page_config(page_title="M-Vision AI")
+st.title("🀄 M-Vision AI点数計算")
 
-# キー設定
-genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-model = genai.GenerativeModel('gemini-1.5-flash')
+# API設定
+if "GEMINI_API_KEY" in st.secrets:
+    genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+    model = genai.GenerativeModel('gemini-1.5-flash')
 
-img_file = st.camera_input("テスト撮影")
+    # カメラ入力
+    img_file = st.camera_input("手牌を撮影してください")
 
-if img_file:
-    img = Image.open(img_file)
-    # 判定ボタンをなくして、撮影したら即実行される最もシンプルな形
-    with st.spinner("AIに直接問い合わせ中..."):
-        try:
-            # 画像をそのままAIに投げる（一番標準的な方法）
-            response = model.generate_content(["この麻雀牌の役を教えて", img])
-            st.write(response.text)
-        except Exception as e:
-            st.error(f"エラー内容: {e}")
-あ
+    if img_file:
+        img = Image.open(img_file)
+        img.thumbnail((400, 400)) # 軽くする
+        
+        with st.spinner("AIが解析中..."):
+            try:
+                # シンプルにAIに聞く
+                response = model.generate_content(["この麻雀牌の役、ドラ、符を教えて", img])
+                st.success("判定完了！")
+                st.write(response.text)
+            except Exception as e:
+                st.error(f"エラー: {e}")
+else:
+    st.error("APIキーが見つかりません")
