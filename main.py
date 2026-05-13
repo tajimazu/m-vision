@@ -10,7 +10,7 @@ st.title("🀄 M-Vision AI点数計算")
 if "GEMINI_API_KEY" in st.secrets:
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
     # モデル名を最新の指定方法に変更
-    model = genai.GenerativeModel('gemini-1.5-flash-latest')
+    model = genai.GenerativeModel('gemini-pro-vision')
 else:
     st.error("APIキーが見つかりません")
     st.stop()
