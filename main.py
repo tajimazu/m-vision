@@ -9,44 +9,38 @@ st.title("🀄 M-Vision AI点数計算")
 
 # --- AIの設定 ---
 if "GEMINI_API_KEY" not in st.secrets:
-    st.error("APIキーがSecretsに設定されていません。")
+    st.error("APIキーが設定されていません。")
     st.stop()
 
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+# 高速な1.5-flashモデルを使用
 model = genai.GenerativeModel('gemini-1.5-flash')
 
 # --- カメラ入力 ---
-st.subheader("📸 牌を撮影してAI解析")
+st.subheader("📸 牌を撮影")
 img_file = st.camera_input("手牌を撮影してください")
 
 if img_file:
-    # 画像を読み込んでリサイズ（高速化のため）
+    # 画像を極限まで軽量化（300pxまで縮小）
     img = Image.open(img_file)
-    img.thumbnail((800, 800)) # サイズを小さくする
+    img.thumbnail((300, 300)) 
     
-    st.image(img, caption="解析を開始します...")
+    st.image(img, caption="この画像をAIに送ります")
     
-    # 解析実行ボタン（自動実行ではなくボタン式にして安定させる）
-    if st.button("AIで役を判定する", type="primary"):
-        with st.spinner("AIが考え中... (10秒ほどお待ちください)"):
-            prompt = "この画像にある麻雀の役とドラの数、符を教えてください。形式：【役】、ドラ【点】、符【点】"
-            
+    if st.button("AI判定をリトライする", type="primary"):
+        with st.spinner("通信中..."):
             try:
-                # 画像をバイトデータに変換して送信
-                buf = io.BytesIO()
-                img.save(buf, format='JPEG')
-                image_data = buf.getvalue()
+                # 命令（プロンプト）
+                prompt = "麻雀の画像です。成立している役、ドラの数、符を教えて。"
                 
-                response = model.generate_content([
-                    prompt,
-                    {'mime_type': 'image/jpeg', 'data': image_data}
-                ])
+                # AIに送信
+                response = model.generate_content([prompt, img])
                 
-                st.success("判定完了！")
-                st.markdown(f"### 🤖 AIの回答\n{response.text}")
-                
+                if response.text:
+                    st.success("AIが回答しました！")
+                    st.write(response.text)
+                else:
+                    st.warning("AIから返答が空でした。もう一度お試しください。")
+                    
             except Exception as e:
-                st.error(f"エラーが発生しました。時間を置いて再度お試しください。内容: {e}")
-
-st.divider()
-st.info("※判定が遅い場合は、一度アプリを再読み込みしてください。")
+                st.error(f"接続エラー: {e}")
