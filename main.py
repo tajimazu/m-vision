@@ -46,7 +46,7 @@ if img_file:
                 ])
                 
                 if response.text:
-                    st.success("AIが回答しました！")
+                    st.success("判定完了！")
                     st.write(response.text)
                 else:
                     st.warning("AIから返答が空でした。もう一度お試しください。")
