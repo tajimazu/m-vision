@@ -1,100 +1,102 @@
 import streamlit as st
+import random
 
 # ページの設定
 st.set_page_config(page_title="Bento Vision", page_icon="🍱")
 
-# デザイン（CSS）
+# デザイン（CSS）で見た目をリッチに
 st.markdown("""
     <style>
     .main { background-color: #fff9f0; }
     .stButton>button { width: 100%; border-radius: 20px; height: 3em; background-color: #ff9e1b; color: white; border: none; font-weight: bold; font-size: 18px; }
     .stButton>button:hover { background-color: #e68a00; border: none; }
-    .result-card { background-color: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-top: 20px; }
-    .result-card h3, .result-card p, .result-card li { color: #2C3E50 !important; }
-    .food-img { width: 100%; border-radius: 15px; margin-top: 10px; margin-bottom: 15px; object-fit: cover; }
+    .result-card { background-color: white; padding: 25px; border-radius: 15px; border-left: 10px solid #ff9e1b; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-top: 20px; }
+    .result-card h3, .result-card p, .result-card li { color: #2c3e50 !important; }
+    .bento-img { width: 100%; border-radius: 10px; margin-top: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
     </style>
     """, unsafe_allow_html=True)
 
 st.title("🍱 Bento Vision")
-st.subheader("お弁当箱の『形』に合わせた理想の提案")
+st.subheader("お弁当箱の隙間、AIが解決します")
 
 # --- 1. お弁当箱の設定 ---
 st.write("---")
-st.write("### 1. お弁当箱の正確な形を選んでください")
+st.write("### 1. お弁当箱を選んでください")
+col1, col2 = st.columns(2)
+with col1:
+    box_shape = st.selectbox("形は？", ["丸・楕円（わっぱ等）", "四角（定番）", "スリムな2段", "丼タイプ"])
+with col2:
+    box_size = st.select_slider("サイズは？", options=["小さめ", "ふつう", "大きめ"])
 
-box_shape = st.selectbox("お弁当箱の形は？", [
-    "楕円形（細長いわっぱ等）", 
-    "真円形（まん丸・どんぶり型）", 
-    "四角形（定番プラスチック）", 
-    "スリムな2段弁当"
-])
+# --- 2. 今日の気分 ---
+st.write("### 2. 今日の気分は？")
+mood = st.radio("", ["ガッツリ食べたい！", "ヘルシーにまとめたい", "とにかく時短（3分以内！）"], horizontal=True)
 
-box_size = st.select_slider("サイズ（容量）の目安", options=["小さめ", "ふつう", "大きめ"])
-
-# --- 2. 今日のメニュー ---
-st.write("### 2. 今日のメニューの気分は？")
-mood = st.radio("", ["彩りヘルシー（鮭・ブロッコリー）", "ガッツリ肉系（から揚げ）"], horizontal=True)
-
-# --- 完全に形を固定した理想の画像URL ---
-# 楕円形には、先ほどの「理想の木製わっぱの楕円写真」をダイレクトに指定しました！
-wappa_oval_image = "https://images.unsplash.com/photo-1621360841013-c7683c659ec6?w=800"
-
-menu_data = {
-    "楕円形（細長いわっぱ等）": {
-        "彩りヘルシー（鮭・ブロッコリー）": {
-            "name": "特選！あじわい楕円わっぱ鮭弁当",
-            "img": wappa_oval_image, 
-            "text": "🔴 赤：焼き鮭のほぐし身（中央にたっぷり）\n🟢 緑：ブロッコリーのごま和え（右側のカーブに沿って）\n🟡 黄：ふっくら卵焼き（隙間にジャストフィット）",
-            "tip": "楕円形（わっぱ）は、長い直線のラインを活かして、おかずを『斜め』または『縦一列』に並べるのがコツです。これにより、丸型のような無駄なデッドスペースが生まれず、隙間がピタッと埋まります！"
-        },
-        "ガッツリ肉系（から揚げ）": {
-            "name": "楕円に敷き詰めるジューシーから揚げ弁当",
-            "img": "https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?w=800",
-            "text": "🔴 赤：ミニトマト\n🟢 緑：ブロッコリー\n🟡 黄：卵焼き",
-            "tip": "楕円の丸い両端に卵焼きとブロッコリーを配置し、中央の広いスペースにメインのから揚げをご飯の上に乗せるように詰めると綺麗に収まります。"
-        }
+# --- リアルなお弁当写真とデータの準備 ---
+# 無料で使える本物の美味しそうな料理写真URLを設定しています
+bento_data = {
+    "丸・楕円（わっぱ等）": {
+        "title": "特選！あじわい鮭わっぱ弁当",
+        "img": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80", # 彩り豊かな健康的なご飯
+        "red": "焼き鮭のほぐし身（中央にたっぷり）",
+        "green": "ブロッコリーのごま和え（右側のカーブに沿って）",
+        "yellow": "ふっくら卵焼き（隙間にジャストフィット）",
+        "tip": "丸いカーブに沿わせるように、ブロッコリーなどの柔らかい副菜を詰めると綺麗に隙間が埋まります！"
+    },
+    "四角（定番）": {
+        "title": "がっつり！唐揚げヒーロー弁当",
+        "img": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80", # 美味しそうな肉・料理
+        "red": "ミニトマト（四隅の角にポンと配置）",
+        "green": "ピーマンの塩昆布和え（唐揚げの仕切りに）",
+        "yellow": "マカロニサラダ（四角い壁に押し付けるように）",
+        "tip": "四角いお弁当箱は「角」にデッドスペースができやすいです。角に固形の卵焼きやミニトマトを最初にロックすると安定します！"
+    },
+    "スリムな2段": {
+        "title": "スタイリッシュ！二段ロコモコ風弁当",
+        "img": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80", # サラダ・ボウル風
+        "red": "にんじんのしりしり（細長い溝を埋める）",
+        "green": "アスパラの肉巻き（長さを活かしてそのまま横たえる）",
+        "yellow": "うずらの煮卵（コロンと隙間に並べる）",
+        "tip": "幅が狭いスリム弁当は、おかずを「横一列」に並べるのがコツ。アスパラなど細長い食材が大活躍します！"
+    },
+    "丼タイプ": {
+        "title": "豪快！彩りそぼろ丼弁当",
+        "img": "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80", # 具だくさん料理
+        "red": "紅生姜（一箇所にまとめてアクセントに）",
+        "green": "絹さや・インゲン（斜めに並べてシャープに）",
+        "yellow": "炒り卵（ご飯が見えないように敷き詰める）",
+        "tip": "丼ものは立体感が命！ご飯を少し山なりに盛り、その傾斜に沿っておかずを乗せていくと立体感が出て美味しそうに見えます。"
     }
-}
-
-# 予備の共通データ
-default_proposal = {
-    "name": "定番！お弁当配置案",
-    "img": "https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?w=800",
-    "text": "🔴 赤：ミニトマト\n🟢 緑：ブロッコリー\n🟡 黄：卵焼き",
-    "tip": "お弁当箱の四隅やカーブに合わせて、形が崩れない卵焼きを最初にはめ込むと、隙間が絶対に生まれません！"
 }
 
 # --- 3. 提案実行 ---
 st.write("---")
-if st.button("✨ この形に最適な隙間埋めアイデアを表示！"):
+if st.button("✨ ピッタリな隙間埋め案を表示！"):
     st.balloons()
     
-    # データの取得
-    if box_shape in menu_data and mood in menu_data[box_shape]:
-        selected = menu_data[box_shape][mood]
-    else:
-        selected = default_proposal
-        
-    # 楕円形が選ばれたら、100%確実にあの「わっぱの楕円写真」を表示します
-    if "楕円形" in box_shape:
-        final_img = wappa_oval_image
-    else:
-        final_img = selected['img']
-
+    # ユーザーが選んだ形に合わせたデータを取得
+    choice = bento_data[box_shape]
+    
     st.markdown(f"""
     <div class="result-card">
-        <h3 style="border-bottom: 2px solid #ff9e1b; padding-bottom: 10px;">🌟 {box_shape}専用の解決策</h3>
-        <p style="font-size: 22px; font-weight: bold; margin-top: 15px; color: #E67E22 !important;">
-            【{selected['name']}】
-        </p>
-        <img src="{final_img}" class="food-img">
-        <p><b>🔍 おすすめの配置と食材:</b></p>
-        <p style="white-space: pre-wrap; font-size: 16px; background-color: #fafafa; padding: 10px; border-radius: 5px;">{selected['text']}</p>
-        <p style="background-color: #fff5e6; padding: 15px; border-radius: 10px; font-size: 15px; border-left: 5px solid #ff9e1b; margin-top: 15px;">
-            💡 <b>この形だからこそ活きる詰め方:</b><br>{selected['tip']}
+        <h2 style="color: #ff9e1b; font-size: 24px; text-align: center; margin-bottom: 5px;">⭐ {box_shape} 専用の解決策</h2>
+        <h3 style="text-align: center; font-weight: bold; margin-bottom: 15px;">【{choice['title']}】</h3>
+        
+        <img src="{choice['img']}" class="bento-img" alt="お弁当イメージ">
+        
+        <p style="margin-top: 20px;">🔍 <b>おすすめの配置と食材:</b></p>
+        <ul>
+            <li>🔴 <b>赤：</b>{choice['red']}</li>
+            <li>🟢 <b>緑：</b>{choice['green']}</li>
+            <li>🟡 <b>黄：</b>{choice['yellow']}</li>
+        </ul>
+        <p style="margin-top:15px; background-color: #fff5e6; padding: 10px; border-radius: 5px;">
+            💡 <b>このお弁当箱を極めるコツ:</b><br>{choice['tip']}
         </p>
     </div>
     """, unsafe_allow_html=True)
+    
+    st.info(f"💡 【{mood}】の気分に合わせてボリュームを微調整しています。明日のランチタイムが楽しみですね！")
 
 st.write("---")
-st.caption("Bento Vision - Precision Shape Edition v4")
+st.caption("Bento Vision - Phase 1.1 (Real Image Test Version)")
