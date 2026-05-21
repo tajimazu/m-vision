@@ -34,46 +34,49 @@ free_list = [
 
 # セッション初期化
 if 'proposal' not in st.session_state: st.session_state.proposal = None
+if 'last_ids' not in st.session_state: st.session_state.last_ids = None
 if 'locks' not in st.session_state: st.session_state.locks = {"rice": False, "s1": False, "s2": False, "s3": False, "s4": False, "s5": False}
 
 st.title("🍱 Bento Vision")
 
-# 写真アップロード
-uploaded_file = st.file_uploader("お弁当箱の写真をアップロード（任意）", type=["jpg", "jpeg", "png"])
-
-# 提案ボタン
-if st.button("✨ 今日のお弁当プランを提案"):
-    st.session_state.proposal = {
+# ランダム提案ロジック（被り防止）
+def get_random_proposal():
+    new_p = {
         "rice": random.choice(rice_list), "s1": random.choice(red_list), 
         "s2": random.choice(green_list), "s3": random.choice(yellow_list), 
         "s4": random.choice(free_list), "s5": random.choice(free_list)
     }
+    current_ids = tuple(item['name'] for item in new_p.values())
+    if current_ids == st.session_state.last_ids:
+        return get_random_proposal()
+    st.session_state.last_ids = current_ids
+    return new_p
 
-# メイン表示
+# アップロード機能
+uploaded_file = st.file_uploader("お弁当箱の写真をアップロード（任意）", type=["jpg", "jpeg", "png"])
+
+# 提案ボタン
+if st.button("✨ 今日のお弁当プランを提案"):
+    st.session_state.proposal = get_random_proposal()
+    st.session_state.locks = {k: False for k in st.session_state.locks}
+
+# 表示処理
 if st.session_state.proposal:
     p = st.session_state.proposal
-    
     if uploaded_file:
         st.markdown("### 📍 配置ガイド")
-        st.image(uploaded_file, caption="この写真を参考に詰めてください", use_container_width=True)
+        st.image(uploaded_file, use_container_width=True)
 
-    st.markdown("### 📝 今日のお弁当案")
-    st.info("決まったおかずはチェックを入れてください")
+    st.markdown("### 📝 今日の献立")
     
-    st.session_state.locks["rice"] = st.checkbox(f"🍚 ご飯: {p['rice']['name']}", value=st.session_state.locks["rice"])
-    st.markdown(f"　 └ [作り方レシピ]({p['rice']['url']})")
-    st.session_state.locks["s1"] = st.checkbox(f"🔴 赤: {p['s1']['name']}", value=st.session_state.locks["s1"])
-    st.markdown(f"　 └ [作り方レシピ]({p['s1']['url']})")
-    st.session_state.locks["s2"] = st.checkbox(f"🟢 緑: {p['s2']['name']}", value=st.session_state.locks["s2"])
-    st.markdown(f"　 └ [作り方レシピ]({p['s2']['url']})")
-    st.session_state.locks["s3"] = st.checkbox(f"🟡 黄: {p['s3']['name']}", value=st.session_state.locks["s3"])
-    st.markdown(f"　 └ [作り方レシピ]({p['s3']['url']})")
-    st.session_state.locks["s4"] = st.checkbox(f"🥢 おかず4: {p['s4']['name']}", value=st.session_state.locks["s4"])
-    st.markdown(f"　 └ [作り方レシピ]({p['s4']['url']})")
-    st.session_state.locks["s5"] = st.checkbox(f"🥢 おかず5: {p['s5']['name']}", value=st.session_state.locks["s5"])
-    st.markdown(f"　 └ [作り方レシピ]({p['s5']['url']})")
+    def show_item(label, key, item):
+        st.session_state.locks[key] = st.checkbox(f"{label}: {item['name']}", value=st.session_state.locks[key])
+        st.markdown(f"　 └ [作り方レシピ]({item['url']})")
 
-    # 再検討ロジック
+    show_item("🍚 ご飯", "rice", p["rice"])
+    show_item("🔴 赤", "s1", p["s1"]); show_item("🟢 緑", "s2", p["s2"]); show_item("🟡 黄", "s3", p["s3"])
+    show_item("🥢 おかず4", "s4", p["s4"]); show_item("🥢 おかず5", "s5", p["s5"])
+
     if st.button("🔄 未チェックを再検討"):
         if not st.session_state.locks["rice"]: st.session_state.proposal["rice"] = random.choice(rice_list)
         if not st.session_state.locks["s1"]: st.session_state.proposal["s1"] = random.choice(red_list)
