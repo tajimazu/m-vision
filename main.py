@@ -5,10 +5,19 @@ import random
 # ページの設定
 st.set_page_config(page_title="Bento Vision", page_icon="🍱")
 
-# おかずのパーツリスト（ここを増やすだけで組み合わせがどんどん増えます！）
-red_list = ["ミニトマト", "カニカマ", "赤パプリカ", "ラディッシュ", "赤ウインナー", "梅干し", "揚げミニトマト", "しば漬け"]
-green_list = ["ブロッコリー", "枝豆", "アスパラガス", "ほうれん草のナムル", "ピーマンの炒め物", "きゅうりの浅漬け", "スナップエンドウ", "インゲンの胡麻和え"]
-yellow_list = ["卵焼き", "コーンバター", "うずらの煮卵", "さつまいもの甘露煮", "カレー炒り卵", "パプリカソテー", "さつまいもチップス", "チーズウインナー"]
+# おかずのパーツリスト（ここを自由に書き換えて、お気に入りのおかずを増やしてください！）
+red_list = [
+    "ミニトマト", "カニカマ", "赤パプリカ", "ラディッシュ", "赤ウインナー", 
+    "梅干し", "揚げミニトマト", "しば漬け", "明太子", "タコさんウィンナー"
+]
+green_list = [
+    "ブロッコリー", "枝豆", "アスパラガス", "ほうれん草のナムル", "ピーマンの炒め物", 
+    "きゅうりの浅漬け", "スナップエンドウ", "インゲンの胡麻和え", "小松菜のおひたし", "オクラ"
+]
+yellow_list = [
+    "卵焼き", "コーンバター", "うずらの煮卵", "さつまいもの甘露煮", "カレー炒り卵", 
+    "パプリカソテー", "さつまいもチップス", "チーズウインナー", "カボチャの煮物", "厚焼き玉子"
+]
 
 st.title("🍱 Bento Vision")
 
@@ -26,10 +35,9 @@ if uploaded_file is not None:
     if st.session_state.proposal is None:
         if st.button("✨ 今日のお弁当プランを提案"):
             with st.status("分析中...", expanded=True) as status:
-                time.sleep(1.2)
+                time.sleep(1.0)
                 status.update(label="完了！", state="complete")
             
-            # 各カテゴリーからランダムに1つずつ選択
             st.session_state.proposal = {
                 "red": random.choice(red_list),
                 "green": random.choice(green_list),
@@ -37,7 +45,7 @@ if uploaded_file is not None:
             }
             st.rerun()
     else:
-        # 結果表示（おかずの名前だけを黒色に強調）
+        # 結果表示
         p = st.session_state.proposal
         st.success("提案が完成しました！")
         
@@ -52,7 +60,7 @@ if uploaded_file is not None:
             </div>
             <div style="background-color: #fff9f0; padding: 15px; border-radius: 10px; margin-top: 20px; color: #555;">
                 <p style="margin: 0;"><b>💡 ワンポイントアドバイス:</b><br>
-                この3色をバランスよく配置するだけで、彩り豊かなプロ級のお弁当になりますよ！</p>
+                彩り豊かな3色のおかずが揃いました！今日のお弁当は完璧な仕上がりになりますよ。</p>
             </div>
         </div>
         """, unsafe_allow_html=True)
