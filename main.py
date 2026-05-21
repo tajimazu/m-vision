@@ -41,26 +41,25 @@ st.title("🍱 Bento Vision")
 
 # ランダム提案ロジック（被り防止）
 def get_random_proposal():
-    new_p = {
-        "rice": random.choice(rice_list), "s1": random.choice(red_list), 
-        "s2": random.choice(green_list), "s3": random.choice(yellow_list), 
-        "s4": random.choice(free_list), "s5": random.choice(free_list)
-    }
-    current_ids = tuple(item['name'] for item in new_p.values())
-    if current_ids == st.session_state.last_ids:
-        return get_random_proposal()
-    st.session_state.last_ids = current_ids
-    return new_p
+    while True:
+        new_p = {
+            "rice": random.choice(rice_list), "s1": random.choice(red_list), 
+            "s2": random.choice(green_list), "s3": random.choice(yellow_list), 
+            "s4": random.choice(free_list), "s5": random.choice(free_list)
+        }
+        # 「おかず4と5が別々」かつ「前回と違う」ことを保証
+        if new_p["s4"]["name"] != new_p["s5"]["name"]:
+            current_ids = tuple(item['name'] for item in new_p.values())
+            if current_ids != st.session_state.last_ids:
+                st.session_state.last_ids = current_ids
+                return new_p
 
-# アップロード機能
 uploaded_file = st.file_uploader("お弁当箱の写真をアップロード（任意）", type=["jpg", "jpeg", "png"])
 
-# 提案ボタン
 if st.button("✨ 今日のお弁当プランを提案"):
     st.session_state.proposal = get_random_proposal()
     st.session_state.locks = {k: False for k in st.session_state.locks}
 
-# 表示処理
 if st.session_state.proposal:
     p = st.session_state.proposal
     if uploaded_file:
@@ -68,7 +67,6 @@ if st.session_state.proposal:
         st.image(uploaded_file, use_container_width=True)
 
     st.markdown("### 📝 今日の献立")
-    
     def show_item(label, key, item):
         st.session_state.locks[key] = st.checkbox(f"{label}: {item['name']}", value=st.session_state.locks[key])
         st.markdown(f"　 └ [作り方レシピ]({item['url']})")
@@ -78,10 +76,17 @@ if st.session_state.proposal:
     show_item("🥢 おかず4", "s4", p["s4"]); show_item("🥢 おかず5", "s5", p["s5"])
 
     if st.button("🔄 未チェックを再検討"):
+        # ロック以外の項目を再選択（ただしおかず4と5の被りは回避する）
         if not st.session_state.locks["rice"]: st.session_state.proposal["rice"] = random.choice(rice_list)
         if not st.session_state.locks["s1"]: st.session_state.proposal["s1"] = random.choice(red_list)
         if not st.session_state.locks["s2"]: st.session_state.proposal["s2"] = random.choice(green_list)
         if not st.session_state.locks["s3"]: st.session_state.proposal["s3"] = random.choice(yellow_list)
         if not st.session_state.locks["s4"]: st.session_state.proposal["s4"] = random.choice(free_list)
-        if not st.session_state.locks["s5"]: st.session_state.proposal["s5"] = random.choice(free_list)
+        if not st.session_state.locks["s5"]: 
+            # s5も同じなら再抽選
+            while True:
+                new_s5 = random.choice(free_list)
+                if new_s5["name"] != st.session_state.proposal["s4"]["name"]:
+                    st.session_state.proposal["s5"] = new_s5
+                    break
         st.rerun()
