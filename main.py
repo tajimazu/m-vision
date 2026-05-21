@@ -19,7 +19,6 @@ rice_list = [
 ]
 
 red_list = [
-   red_list = [
     {"name": "明太と糸こんにゃくの炒め", "url": "https://cookpad.com/search/明太と糸こんにゃくの炒め"},
     {"name": "ミニトマトのハチミツマリネ", "url": "https://cookpad.com/search/ミニトマトのハチミツマリネ"},
     {"name": "パプリカとピーマンのきんぴら", "url": "https://cookpad.com/search/パプリカとピーマンのきんぴら"},
