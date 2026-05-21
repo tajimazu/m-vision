@@ -57,8 +57,8 @@ if st.session_state.proposal:
         st.markdown("### 📍 配置ガイド")
         st.image(uploaded_file, caption="この写真を参考に詰めてください", use_container_width=True)
 
-    st.markdown("### 📝 今日の献立とレシピ")
-    st.info("固定したいおかずはチェックを入れてください")
+    st.markdown("### 📝 今日のお弁当案")
+    st.info("決まったおかずはチェックを入れてください")
     
     st.session_state.locks["rice"] = st.checkbox(f"🍚 ご飯: {p['rice']['name']}", value=st.session_state.locks["rice"])
     st.markdown(f"　 └ [作り方レシピ]({p['rice']['url']})")
