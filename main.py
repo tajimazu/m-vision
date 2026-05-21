@@ -19,16 +19,37 @@ rice_list = [
 ]
 
 red_list = [
-    {"name": "ミニトマト", "url": "https://www.kurashiru.com/search?query=ミニトマト"}, {"name": "カニカマ", "url": "https://www.kurashiru.com/search?query=カニカマ"},
-    {"name": "赤パプリカ", "url": "https://www.kurashiru.com/search?query=赤パプリカ"}, {"name": "ラディッシュ", "url": "https://www.kurashiru.com/search?query=ラディッシュ"},
-    {"name": "赤ウインナー", "url": "https://www.kurashiru.com/search?query=赤ウインナー"}, {"name": "揚げミニトマト", "url": "https://www.kurashiru.com/search?query=揚げミニトマト"},
-    {"name": "明太子", "url": "https://www.kurashiru.com/search?query=明太子"}, {"name": "タコさんウィンナー", "url": "https://www.kurashiru.com/search?query=タコさんウィンナー"},
-    {"name": "しば漬け", "url": "https://www.kurashiru.com/search?query=しば漬け"}, {"name": "赤パプリカマリネ", "url": "https://www.kurashiru.com/search?query=赤パプリカマリネ"},
-    {"name": "赤かぶ漬け", "url": "https://www.kurashiru.com/search?query=赤かぶ漬け"}, {"name": "イチゴ", "url": "https://www.kurashiru.com/search?query=イチゴ"},
-    {"name": "さくらんぼ", "url": "https://www.kurashiru.com/search?query=さくらんぼ"}, {"name": "赤パプリカ素揚げ", "url": "https://www.kurashiru.com/search?query=赤パプリカ素揚げ"},
-    {"name": "ビーツサラダ", "url": "https://www.kurashiru.com/search?query=ビーツサラダ"}, {"name": "トマトマリネ", "url": "https://www.kurashiru.com/search?query=トマトマリネ"},
-    {"name": "赤ハム巻き", "url": "https://www.kurashiru.com/search?query=赤ハム巻き"}, {"name": "カニカママヨ", "url": "https://www.kurashiru.com/search?query=カニカママヨ"},
-    {"name": "冷凍ラズベリー", "url": "https://www.kurashiru.com/search?query=冷凍ラズベリー"}, {"name": "紅しょうが", "url": "https://www.kurashiru.com/search?query=紅しょうが"}
+   red_list = [
+    {"name": "明太と糸こんにゃくの炒め", "url": "https://cookpad.com/search/明太と糸こんにゃくの炒め"},
+    {"name": "ミニトマトのハチミツマリネ", "url": "https://cookpad.com/search/ミニトマトのハチミツマリネ"},
+    {"name": "パプリカとピーマンのきんぴら", "url": "https://cookpad.com/search/パプリカとピーマンのきんぴら"},
+    {"name": "赤ウインナーのタコさん風", "url": "https://cookpad.com/search/赤ウインナーのタコさん風"},
+    {"name": "トマトとチーズのサラダ", "url": "https://cookpad.com/search/トマトとチーズのサラダ"},
+    {"name": "カニカマ入りだし巻き卵", "url": "https://cookpad.com/search/カニカマ入りだし巻き卵"},
+    {"name": "赤パプリカのナムル", "url": "https://cookpad.com/search/赤パプリカのナムル"},
+    {"name": "エビのチリソース炒め", "url": "https://cookpad.com/search/エビのチリソース炒め"},
+    {"name": "トマトの肉巻き", "url": "https://cookpad.com/search/トマトの肉巻き"},
+    {"name": "しば漬けとチーズの和え物", "url": "https://cookpad.com/search/しば漬けとチーズの和え物"},
+    {"name": "イチゴと生ハムのカプレーゼ風", "url": "https://cookpad.com/search/イチゴと生ハムのカプレーゼ風"},
+    {"name": "赤かぶの甘酢漬け", "url": "https://cookpad.com/search/赤かぶの甘酢漬け"},
+    {"name": "鮭の南蛮漬け", "url": "https://cookpad.com/search/鮭の南蛮漬け"},
+    {"name": "梅干し入りの鶏つくね", "url": "https://cookpad.com/search/梅干し入りの鶏つくね"},
+    {"name": "カニカマとブロッコリーのサラダ", "url": "https://cookpad.com/search/カニカマとブロッコリーのサラダ"},
+    {"name": "パプリカのピリ辛炒め", "url": "https://cookpad.com/search/パプリカのピリ辛炒め"},
+    {"name": "明太子スパゲティサラダ", "url": "https://cookpad.com/search/明太子スパゲティサラダ"},
+    {"name": "トマトのシソ和え", "url": "https://cookpad.com/search/トマトのシソ和え"},
+    {"name": "赤ハムのアスパラ巻き", "url": "https://cookpad.com/search/赤ハムのアスパラ巻き"},
+    {"name": "紅しょうがの卵焼き", "url": "https://cookpad.com/search/紅しょうがの卵焼き"},
+    {"name": "トマトのチーズ焼き", "url": "https://cookpad.com/search/トマトのチーズ焼き"},
+    {"name": "人参のグラッセ", "url": "https://cookpad.com/search/人参のグラッセ"},
+    {"name": "人参しりしり", "url": "https://cookpad.com/search/人参しりしり"},
+    {"name": "パプリカのピクルス", "url": "https://cookpad.com/search/パプリカのピクルス"},
+    {"name": "ミニトマトのベーコン巻き", "url": "https://cookpad.com/search/ミニトマトのベーコン巻き"},
+    {"name": "かにかまチーズ海苔巻き", "url": "https://cookpad.com/search/かにかまチーズ海苔巻き"},
+    {"name": "ハムとアスパラの巻きもの", "url": "https://cookpad.com/search/ハムとアスパラの巻きもの"},
+    {"name": "魚肉ソーセージのケチャップ炒め", "url": "https://cookpad.com/search/魚肉ソーセージのケチャップ炒め"},
+    {"name": "明太子のポテトサラダ", "url": "https://cookpad.com/search/明太子のポテトサラダ"},
+    {"name": "パプリカのツナ和え", "url": "https://cookpad.com/search/パプリカのツナ和え"}
 ]
 
 green_list = [
