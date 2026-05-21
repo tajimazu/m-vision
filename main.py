@@ -5,12 +5,14 @@ import time
 st.set_page_config(page_title="Bento Vision", page_icon="🍱")
 
 st.title("🍱 Bento Vision")
-st.subheader("お弁当の隙間、AIが解決します")
+st.subheader("カメラを向けてお弁当箱を分析")
 
-# --- 1. カメラ撮影 ---
+# --- 1. カメラ撮影（外向きカメラを強制指定） ---
 st.write("---")
-st.write("### 📸 お弁当箱（空でもOK！）を撮ってください")
-uploaded_file = st.camera_input("カメラを起動して撮影")
+st.write("### 📸 お弁当箱を撮影してください")
+
+# 'environment' を指定することで、背面カメラを優先的に起動します
+uploaded_file = st.camera_input("ここをタップして外向きカメラを起動", camera_facing="environment")
 
 # --- 2. レシピ考案スタートボタン ---
 if uploaded_file is not None:
@@ -20,11 +22,11 @@ if uploaded_file is not None:
         
         # --- 3. 解析・分析の演出 ---
         with st.status("解析・分析中...", expanded=True) as status:
-            st.write("弁当箱の形状をスキャンしています...")
+            st.write("お弁当箱の形をスキャン中...")
             time.sleep(1.5)
             st.write("隙間の面積を計算中...")
             time.sleep(1.5)
-            st.write("冷蔵庫の食材とマッチング中...")
+            st.write("彩り豊かな食材とマッチング中...")
             time.sleep(1.5)
             status.update(label="アイデアの提示完了！", state="complete", expanded=False)
 
@@ -38,11 +40,11 @@ if uploaded_file is not None:
             <p><strong>2. 枝豆ピック：</strong>小さい隙間を埋めるのに最適！見た目も華やかに。</p>
             <p><strong>3. ふっくら卵焼き：</strong>箱の形に合わせてカットして詰めるとプロ級の仕上がり。</p>
             <hr>
-            <p><i>この隙間なら、お昼にはちょうど良いバランスになります！</i></p>
+            <p><i>お弁当箱の形をしっかり認識しました！この配置で最高のお弁当になりますよ。</i></p>
         </div>
         """, unsafe_allow_html=True)
         
         st.balloons()
 
 st.write("---")
-st.caption("Bento Vision - Phase 2.1 (Complete Flow Version)")
+st.caption("Bento Vision - Phase 2.2 (Back Camera Version)")
