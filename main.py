@@ -33,7 +33,7 @@ yellow_list = [
 
 # フリー枠（レシピリンク付き）
 free_list = [
-    {"name": "鶏の唐揚げ", "url": "https://www.kurashiru.com/recipes/53066d95-e2a2-466d-8874-884988775f0a"},
+    {"name": "鶏の唐揚げ", "url": "https://www.kurashiru.com/recipes/4dbf823e-598f-4fc0-b609-8f6fff8028b6"},
     {"name": "ハンバーグ", "url": "https://www.kurashiru.com/recipes/d61e6950-653a-441c-b710-bb2a4a796e63"},
     {"name": "焼き鮭", "url": "https://www.kurashiru.com/recipes/209c18d9-cf6a-466f-b25c-02cf4c3b53c1"},
     {"name": "豚肉の生姜焼き", "url": "https://www.kurashiru.com/recipes/a2327797-40b4-4e20-8025-5f99166f2868"},
