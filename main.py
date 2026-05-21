@@ -41,9 +41,9 @@ if uploaded_file is not None:
         
         st.session_state.locks["rice"] = st.checkbox(f"🍚 ご飯: {p['rice']}", value=st.session_state.locks["rice"])
         
-        # 1〜3は色付き、4〜5はフリー
+        # 1〜3は赤緑黄の丸、4〜5はフリー枠
         keys = ["s1", "s2", "s3", "s4", "s5"]
-        labels = ["🥢 おかず 1 (赤)", "🥢 おかず 2 (緑)", "🥢 おかず 3 (黄)", "🥢 おかず 4 (フリー)", "🥢 おかず 5 (フリー)"]
+        labels = ["🔴 おかず 1", "🟢 おかず 2", "🟡 おかず 3", "🥢 おかず 4", "🥢 おかず 5"]
         
         for i, key in enumerate(keys):
             st.session_state.locks[key] = st.checkbox(f"{labels[i]}: {p[key]}", value=st.session_state.locks[key])
