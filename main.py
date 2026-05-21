@@ -4,13 +4,12 @@ import random
 # ページの設定
 st.set_page_config(page_title="Bento Vision", page_icon="🍱")
 
-# リスト
+# リストの分類
 rice_list = ["白ご飯（梅干し添え）", "わかめご飯", "炊き込みご飯", "鮭フレークご飯", "玄米ご飯", "雑穀米", "ゆかりご飯", "炒飯"]
-side_list = [
-    "ミニトマト", "カニカマ", "赤パプリカ", "ラディッシュ", "赤ウインナー", "梅干し", "揚げミニトマト", "しば漬け", "明太子", "タコさんウィンナー",
-    "ブロッコリー", "枝豆", "アスパラガス", "ほうれん草のナムル", "ピーマンの炒め物", "きゅうりの浅漬け", "スナップエンドウ", "インゲンの胡麻和え", "小松菜のおひたし", "オクラ",
-    "卵焼き", "コーンバター", "うずらの煮卵", "さつまいもの甘露煮", "カレー炒り卵", "パプリカソテー", "さつまいもチップス", "チーズウインナー", "カボチャの煮物", "厚焼き玉子"
-]
+red_list = ["ミニトマト", "カニカマ", "赤パプリカ", "ラディッシュ", "赤ウインナー", "梅干し", "揚げミニトマト", "明太子"]
+green_list = ["ブロッコリー", "枝豆", "アスパラガス", "ほうれん草のナムル", "ピーマンの炒め物", "きゅうりの浅漬け", "スナップエンドウ", "インゲンの胡麻和え"]
+yellow_list = ["卵焼き", "コーンバター", "うずらの煮卵", "さつまいもの甘露煮", "カレー炒り卵", "パプリカソテー", "厚焼き玉子"]
+free_list = ["鶏の唐揚げ", "ハンバーグ", "焼き鮭", "豚肉の生姜焼き", "ちくわの磯辺揚げ", "コロッケ", "鯖の塩焼き", "肉団子"]
 
 st.title("🍱 Bento Vision")
 
@@ -29,9 +28,9 @@ if uploaded_file is not None:
         if st.button("✨ 今日のお弁当プランを提案"):
             st.session_state.proposal = {
                 "rice": random.choice(rice_list),
-                "s1": random.choice(side_list), "s2": random.choice(side_list),
-                "s3": random.choice(side_list), "s4": random.choice(side_list),
-                "s5": random.choice(side_list)
+                "s1": random.choice(red_list), "s2": random.choice(green_list),
+                "s3": random.choice(yellow_list), "s4": random.choice(free_list),
+                "s5": random.choice(free_list)
             }
             st.rerun()
     else:
@@ -42,16 +41,21 @@ if uploaded_file is not None:
         
         st.session_state.locks["rice"] = st.checkbox(f"🍚 ご飯: {p['rice']}", value=st.session_state.locks["rice"])
         
-        # 1〜5を縦に並べて表示
+        # 1〜3は色付き、4〜5はフリー
         keys = ["s1", "s2", "s3", "s4", "s5"]
+        labels = ["🥢 おかず 1 (赤)", "🥢 おかず 2 (緑)", "🥢 おかず 3 (黄)", "🥢 おかず 4 (フリー)", "🥢 おかず 5 (フリー)"]
+        
         for i, key in enumerate(keys):
-            st.session_state.locks[key] = st.checkbox(f"🥢 おかず {i+1}: {p[key]}", value=st.session_state.locks[key])
+            st.session_state.locks[key] = st.checkbox(f"{labels[i]}: {p[key]}", value=st.session_state.locks[key])
         
         st.write("")
         if st.button("🔄 ロックしていないものを再検討"):
             if not st.session_state.locks["rice"]: st.session_state.proposal["rice"] = random.choice(rice_list)
-            for key in keys:
-                if not st.session_state.locks[key]: st.session_state.proposal[key] = random.choice(side_list)
+            if not st.session_state.locks["s1"]: st.session_state.proposal["s1"] = random.choice(red_list)
+            if not st.session_state.locks["s2"]: st.session_state.proposal["s2"] = random.choice(green_list)
+            if not st.session_state.locks["s3"]: st.session_state.proposal["s3"] = random.choice(yellow_list)
+            if not st.session_state.locks["s4"]: st.session_state.proposal["s4"] = random.choice(free_list)
+            if not st.session_state.locks["s5"]: st.session_state.proposal["s5"] = random.choice(free_list)
             st.rerun()
 
         if st.button("❌ 全部リセット"):
@@ -59,4 +63,4 @@ if uploaded_file is not None:
             st.session_state.locks = {k: False for k in st.session_state.locks}
             st.rerun()
 
-st.caption("Bento Vision - Deluxe Plan Version")
+st.caption("Bento Vision - Balanced Plan")
