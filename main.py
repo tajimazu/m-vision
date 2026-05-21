@@ -76,4 +76,5 @@ if st.button("✨ 理想のお弁当アイデアを表示する！"):
     </div>
     """, unsafe_allow_html=True)
 
-st
+st.write("---")
+st.caption("Bento Vision - Wappa Style Edition")
