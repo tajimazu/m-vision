@@ -15,8 +15,8 @@ st.markdown("""
 st.title("🍱 Bento Vision")
 st.subheader("カメラ撮影＆お弁当分析")
 
-# カメラ撮影
-uploaded_file = st.camera_input("カメラを起動して撮影", camera_facing="environment")
+# カメラ撮影（エラー回避のためオプションを削除）
+uploaded_file = st.camera_input("カメラを起動して撮影")
 
 if uploaded_file is not None:
     st.image(uploaded_file, caption="撮影したお弁当箱", use_container_width=True)
@@ -32,7 +32,7 @@ if uploaded_file is not None:
             time.sleep(1.0)
             status.update(label="完了！", state="complete")
         
-        # 結果の提示（メニューを明記）
+        # 結果の提示
         st.success("提案が完成しました！")
         st.markdown("""
         <div class="result-box">
@@ -40,9 +40,8 @@ if uploaded_file is not None:
             <p>🔴 <b>赤：ミニトマト</b>（彩りに最適！）</p>
             <p>🟢 <b>緑：ブロッコリー</b>（隙間のボリュームアップに。）</p>
             <p>🟡 <b>黄：卵焼き</b>（どんな隙間にもフィットする万能選手！）</p>
-            <p><i>※今後はここにお弁当箱の形に合わせた、より具体的なレシピを表示します！</i></p>
         </div>
         """, unsafe_allow_html=True)
         st.balloons()
 
-st.caption("Bento Vision - Stable Version 2.0")
+st.caption("Bento Vision - Stability Patch")
