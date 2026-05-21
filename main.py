@@ -12,13 +12,32 @@ rice_list = [
     "とろろ昆布ご飯", "オムライス風ご飯", "豆ごはん", "そぼろご飯", "カレーピラフ"
 ]
 
-# 2. 彩りおかず（1〜3）
-red_list = ["ミニトマト", "カニカマ", "赤パプリカ", "ラディッシュ", "赤ウインナー", "梅干し", "揚げミニトマト", "明太子"]
-green_list = ["ブロッコリー", "枝豆", "アスパラガス", "ほうれん草のナムル", "ピーマンの炒め物", "きゅうりの浅漬け", "スナップエンドウ", "インゲンの胡麻和え"]
-yellow_list = ["卵焼き", "コーンバター", "うずらの煮卵", "さつまいもの甘露煮", "カレー炒り卵", "パプリカソテー", "厚焼き玉子"]
+# 2. 彩りおかず（赤をさらに10個追加！）
+red_list = [
+    "ミニトマト", "カニカマ", "赤パプリカ", "ラディッシュ", "赤ウインナー", 
+    "梅干し", "揚げミニトマト", "明太子", "タコさんウィンナー", "しば漬け", 
+    "パプリカのマリネ", "赤かぶの甘酢漬け",
+    # 追加した10個
+    "イチゴ", "さくらんぼ", "赤パプリカの素揚げ", "ビーツのサラダ", "トマトのマリネ", 
+    "赤いハム巻き", "カニカマのマヨ和え", "冷凍ラズベリー", "赤ピーマンの炒め物", "紅しょうが"
+]
+green_list = [
+    "ブロッコリー", "枝豆", "アスパラガス", "ほうれん草のナムル", "ピーマンの炒め物", 
+    "きゅうりの浅漬け", "スナップエンドウ", "インゲンの胡麻和え", "小松菜のおひたし", "オクラ",
+    "ピーマンの肉詰め", "ほうれん草のバターソテー"
+]
+yellow_list = [
+    "卵焼き", "コーンバター", "うずらの煮卵", "さつまいもの甘露煮", "カレー炒り卵", 
+    "パプリカソテー", "厚焼き玉子", "チーズウインナー", "カボチャの煮物", "コーンの素揚げ",
+    "炒り卵", "さつまいものレモン煮"
+]
 
-# 3. フリー枠おかず（4〜5）
-free_list = ["鶏の唐揚げ", "ハンバーグ", "焼き鮭", "豚肉の生姜焼き", "ちくわの磯辺揚げ", "コロッケ", "鯖の塩焼き", "肉団子", "エビフライ", "トンカツ"]
+# 3. フリー枠おかず
+free_list = [
+    "鶏の唐揚げ", "ハンバーグ", "焼き鮭", "豚肉の生姜焼き", "ちくわの磯辺揚げ", 
+    "コロッケ", "鯖の塩焼き", "肉団子", "エビフライ", "トンカツ",
+    "鶏の照り焼き", "ブリの照り焼き", "厚揚げの煮物", "シュウマイ", "餃子"
+]
 
 st.title("🍱 Bento Vision")
 
@@ -26,7 +45,7 @@ st.title("🍱 Bento Vision")
 if 'proposal' not in st.session_state:
     st.session_state.proposal = None
 if 'locks' not in st.session_state:
-    st.session_state.locks = {"rice": False, "s1": False, "s2": False, "s3": False, "s4": False, "s5": False}
+    st.locks = {"rice": False, "s1": False, "s2": False, "s3": False, "s4": False, "s5": False}
 
 uploaded_file = st.file_uploader("お弁当箱の写真をアップロード", type=["jpg", "jpeg", "png"])
 
@@ -52,7 +71,7 @@ if uploaded_file is not None:
         # ご飯のロック
         st.session_state.locks["rice"] = st.checkbox(f"🍚 ご飯: {p['rice']}", value=st.session_state.locks["rice"])
         
-        # おかずのロック（1-3は色丸、4-5はフリー）
+        # おかずのロック
         keys = ["s1", "s2", "s3", "s4", "s5"]
         labels = ["🔴 おかず 1", "🟢 おかず 2", "🟡 おかず 3", "🥢 おかず 4", "🥢 おかず 5"]
         
@@ -76,4 +95,4 @@ if uploaded_file is not None:
             st.session_state.locks = {k: False for k in st.session_state.locks}
             st.rerun()
 
-st.caption("Bento Vision - Complete Version")
+st.caption("Bento Vision - Red Expanded Version")
