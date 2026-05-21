@@ -4,7 +4,7 @@ import random
 # ページの設定
 st.set_page_config(page_title="Bento Vision", page_icon="🍱")
 
-# リストの拡張
+# リスト
 rice_list = ["白ご飯（梅干し添え）", "わかめご飯", "炊き込みご飯", "鮭フレークご飯", "玄米ご飯", "雑穀米", "ゆかりご飯", "炒飯"]
 side_list = [
     "ミニトマト", "カニカマ", "赤パプリカ", "ラディッシュ", "赤ウインナー", "梅干し", "揚げミニトマト", "しば漬け", "明太子", "タコさんウィンナー",
@@ -40,19 +40,12 @@ if uploaded_file is not None:
         
         st.markdown("### 🍱 今日の献立（固定したいものにチェック）")
         
-        # ご飯のロック
         st.session_state.locks["rice"] = st.checkbox(f"🍚 ご飯: {p['rice']}", value=st.session_state.locks["rice"])
         
-        # おかずのロック（2列に分ける）
-        col1, col2 = st.columns(2)
+        # 1〜5を縦に並べて表示
         keys = ["s1", "s2", "s3", "s4", "s5"]
         for i, key in enumerate(keys):
-            if i % 2 == 0:
-                with col1:
-                    st.session_state.locks[key] = st.checkbox(f"🥢 おかず{i+1}: {p[key]}", value=st.session_state.locks[key])
-            else:
-                with col2:
-                    st.session_state.locks[key] = st.checkbox(f"🥢 おかず{i+1}: {p[key]}", value=st.session_state.locks[key])
+            st.session_state.locks[key] = st.checkbox(f"🥢 おかず {i+1}: {p[key]}", value=st.session_state.locks[key])
         
         st.write("")
         if st.button("🔄 ロックしていないものを再検討"):
