@@ -4,15 +4,21 @@ import random
 # ページの設定
 st.set_page_config(page_title="Bento Vision", page_icon="🍱")
 
-# リストの分類
-rice_list = [rice_list = ["白ご飯（梅干し添え）", "わかめご飯", "炊き込みご飯", "鮭フレークご飯", "玄米ご飯", 
+# 1. ご飯のリスト（20パターン）
+rice_list = [
+    "白ご飯（梅干し添え）", "わかめご飯", "炊き込みご飯", "鮭フレークご飯", "玄米ご飯", 
     "雑穀米", "ゆかりご飯", "炒飯", "塩昆布おにぎり", "ツナマヨご飯", 
     "高菜ご飯", "菜飯（なめし）", "カリカリ梅ご飯", "鰹節おかかご飯", "五目ちらし寿司", 
-    "とろろ昆布ご飯", "オムライス風ご飯", "豆ごはん", "そぼろご飯", "カレーピラフ"]
+    "とろろ昆布ご飯", "オムライス風ご飯", "豆ごはん", "そぼろご飯", "カレーピラフ"
+]
+
+# 2. 彩りおかず（1〜3）
 red_list = ["ミニトマト", "カニカマ", "赤パプリカ", "ラディッシュ", "赤ウインナー", "梅干し", "揚げミニトマト", "明太子"]
 green_list = ["ブロッコリー", "枝豆", "アスパラガス", "ほうれん草のナムル", "ピーマンの炒め物", "きゅうりの浅漬け", "スナップエンドウ", "インゲンの胡麻和え"]
 yellow_list = ["卵焼き", "コーンバター", "うずらの煮卵", "さつまいもの甘露煮", "カレー炒り卵", "パプリカソテー", "厚焼き玉子"]
-free_list = ["鶏の唐揚げ", "ハンバーグ", "焼き鮭", "豚肉の生姜焼き", "ちくわの磯辺揚げ", "コロッケ", "鯖の塩焼き", "肉団子"]
+
+# 3. フリー枠おかず（4〜5）
+free_list = ["鶏の唐揚げ", "ハンバーグ", "焼き鮭", "豚肉の生姜焼き", "ちくわの磯辺揚げ", "コロッケ", "鯖の塩焼き", "肉団子", "エビフライ", "トンカツ"]
 
 st.title("🍱 Bento Vision")
 
@@ -27,6 +33,7 @@ uploaded_file = st.file_uploader("お弁当箱の写真をアップロード", t
 if uploaded_file is not None:
     st.image(uploaded_file, caption="撮影したお弁当箱", use_container_width=True)
     
+    # 提案ボタン
     if st.session_state.proposal is None:
         if st.button("✨ 今日のお弁当プランを提案"):
             st.session_state.proposal = {
@@ -42,9 +49,10 @@ if uploaded_file is not None:
         
         st.markdown("### 🍱 今日の献立（固定したいものにチェック）")
         
+        # ご飯のロック
         st.session_state.locks["rice"] = st.checkbox(f"🍚 ご飯: {p['rice']}", value=st.session_state.locks["rice"])
         
-        # 1〜3は赤緑黄の丸、4〜5はフリー枠
+        # おかずのロック（1-3は色丸、4-5はフリー）
         keys = ["s1", "s2", "s3", "s4", "s5"]
         labels = ["🔴 おかず 1", "🟢 おかず 2", "🟡 おかず 3", "🥢 おかず 4", "🥢 おかず 5"]
         
@@ -52,6 +60,7 @@ if uploaded_file is not None:
             st.session_state.locks[key] = st.checkbox(f"{labels[i]}: {p[key]}", value=st.session_state.locks[key])
         
         st.write("")
+        # 再検討ボタン
         if st.button("🔄 ロックしていないものを再検討"):
             if not st.session_state.locks["rice"]: st.session_state.proposal["rice"] = random.choice(rice_list)
             if not st.session_state.locks["s1"]: st.session_state.proposal["s1"] = random.choice(red_list)
@@ -61,9 +70,10 @@ if uploaded_file is not None:
             if not st.session_state.locks["s5"]: st.session_state.proposal["s5"] = random.choice(free_list)
             st.rerun()
 
+        # 全部リセットボタン
         if st.button("❌ 全部リセット"):
             st.session_state.proposal = None
             st.session_state.locks = {k: False for k in st.session_state.locks}
             st.rerun()
 
-st.caption("Bento Vision - Balanced Plan")
+st.caption("Bento Vision - Complete Version")
