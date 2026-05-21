@@ -11,6 +11,8 @@ st.markdown("""
     .stButton>button { width: 100%; border-radius: 20px; height: 3em; background-color: #ff9e1b; color: white; border: none; font-weight: bold; }
     .stButton>button:hover { background-color: #e68a00; border: none; }
     .result-card { background-color: white; padding: 20px; border-radius: 15px; border-left: 10px solid #ff9e1b; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    /* 文字の色を黒に固定 */
+    .result-card h3, .result-card p, .result-card li { color: black !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -54,16 +56,20 @@ if st.button("✨ ピッタリな隙間埋め案を表示！"):
     dish_yellow = random.choice(side_dishes["yellow"])
     tip = side_dishes["tips"][box_shape]
     
+    # 巨大化したアイコンと文字色の修正
     st.markdown(f"""
     <div class="result-card">
-        <h3>🍱 {box_shape}（{box_size}）への提案</h3>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <p style="font-size: 120px; margin: 0; line-height: 1;">🍱</p>
+            <h3>{box_shape}（{box_size}）への提案</h3>
+        </div>
         <p><strong>【おすすめの隙間埋め3点セット】</strong></p>
         <ul>
-            <li>🔴 <b>{dish_red}</b>（赤色のアクセント）</li>
-            <li>🟢 <b>{dish_green}</b>（鮮やかな緑）</li>
-            <li>🟡 <b>{dish_yellow}</b>（安定の黄色）</li>
+            <li>🔴 <b>{dish_red}</b></li>
+            <li>🟢 <b>{dish_green}</b></li>
+            <li>🟡 <b>{dish_yellow}</b></li>
         </ul>
-        <p style="margin-top:15px; color:#666;">💡 <b>詰め方のコツ:</b><br>{tip}</p>
+        <p style="margin-top:15px; color:#666 !important;">💡 <b>詰め方のコツ:</b><br>{tip}</p>
     </div>
     """, unsafe_allow_html=True)
     
